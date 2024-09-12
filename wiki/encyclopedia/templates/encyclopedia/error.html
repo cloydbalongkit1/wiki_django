@@ -1,0 +1,12 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    ERROR
+{% endblock %}
+
+{% block body %}
+    <div class="alert alert-danger" role="alert">
+        No such information on this subject. Go back to the Home page by clicking this 
+        <a href="{% url 'index' %}" class="alert-link">Link</a>. Thanks!
+    </div>
+{% endblock %}
