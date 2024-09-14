@@ -1,30 +1,16 @@
 from django.shortcuts import render
 
-from . import util
-
-
-
-def get_entry_content(title):
-    entry = util.get_entry(title)
-    if entry is None:
-        return None, None
-    
-    contents = entry.split()
-    if len(contents) < 3:
-        return None, None
-    
-    body = ' '.join(contents[2:])
-    return contents[1], body
+from . import own_util, util
 
 
 
 def index(request):
     query = request.GET.get('q')
     if query:
-        title, body = get_entry_content(query)
+        title, body = own_util.get_substring(query)
         if title is None:
             return render(request, "encyclopedia/error.html", {"title": query})
-        
+
         return render(request, "encyclopedia/title.html", {
             "title": title,
             "body": body,
@@ -38,7 +24,7 @@ def index(request):
 
 
 def title(request, title):
-    title, body = get_entry_content(title)
+    title, body = own_util.get_entry_content(title)
     if title is None:
         return render(request, "encyclopedia/error.html", {"title": title})
     
