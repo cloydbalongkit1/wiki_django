@@ -1,8 +1,10 @@
 import random
+from markdown2 import markdown
 
 from django.shortcuts import render, redirect
+from django.utils.safestring import mark_safe
 
-from . import own_util, util
+from . import my_util, util
 from .forms import EntryForm
 
 
@@ -10,14 +12,16 @@ from .forms import EntryForm
 def index(request):
     query = request.GET.get('q')
     if query:
-        title, body = own_util.get_substring(query)
+        title, body = my_util.get_substring(query)
         if title is None:
             return render(request, "encyclopedia/error.html")
 
+        body_html = mark_safe(markdown(body))
         return render(request, "encyclopedia/title.html", {
             "title": title,
-            "body": body,
+            "body": body_html,
         })
+
 
     entries = util.list_entries()
     return render(request, "encyclopedia/index.html", {
@@ -26,14 +30,15 @@ def index(request):
 
 
 
-def render_entry(request, entry_title):
-    title, body = own_util.get_entry_content(entry_title)
+def render_entry(request, title):
+    title, body = my_util.get_entry_content(title)
     if title is None:
         return render(request, "encyclopedia/error.html")
     
+    body_html = mark_safe(markdown(body))
     return render(request, "encyclopedia/title.html", {
         "title": title,
-        "body": body,
+        "body": body_html,
     })
 
 
@@ -61,9 +66,13 @@ def create(request):
         util.save_entry(input_title, input_text)
         return redirect('index')
 
-    form = EntryForm()
-    title = 'Create New Page'
-    return render(request, "encyclopedia/entry_form.html", {'form': form, 'title': title})
+    template_data = {
+        'title': 'Your title input here...',
+        'body': f"# Title...\n Body...", 
+        }
+    form = EntryForm(template_data)
+    page_title = 'Create New Page'
+    return render(request, "encyclopedia/entry_form.html", {'form': form, 'title': page_title})
 
 
 
@@ -78,15 +87,14 @@ def edit(request, title):
         util.save_entry(input_title, input_text)
         return redirect('index')
 
-
-    title, body = own_util.get_entry_content(title)
+    title, body = my_util.get_entry_content(title)
     existing_data = {
         'title': title,
         'body': f"# {title}\n{body}", 
         }
     form = EntryForm(existing_data)
-    title = 'Edit New Page'
-    return render(request, "encyclopedia/entry_form.html", {'form': form, 'title': title})
+    page_title = 'Edit New Page'
+    return render(request, "encyclopedia/entry_form.html", {'form': form, 'title': page_title})
 
 
 

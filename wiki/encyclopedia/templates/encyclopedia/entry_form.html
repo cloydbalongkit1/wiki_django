@@ -17,7 +17,7 @@
                 <input type="submit" value="Save">
             </form>
 
-            {% else %}
+            {% elif title == "Edit New Page" %}
             <form action="{% url 'edit' title %}" method="post">
                 {% csrf_token %}
                 {{ form }}

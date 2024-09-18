@@ -1,7 +1,6 @@
 from django import forms
 
 
-
 class EntryForm(forms.Form):
     title = forms.CharField(
         label="Title", 
@@ -13,4 +12,5 @@ class EntryForm(forms.Form):
         widget=forms.Textarea(attrs={'rows': 3, 'cols': 30}), 
         required=True,
         )
+
 
