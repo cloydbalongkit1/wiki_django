@@ -53,7 +53,7 @@ def create(request):
         return redirect('index')
 
     form = EntryForm()
-    page_title = 'Create New Page'
+    page_title = 'Create Wiki'
     return render(request, "encyclopedia/entry_form.html", {'form': form, 'title': page_title})
 
 
@@ -75,6 +75,7 @@ def edit(request, title):
         'body': content, 
         }
     form = EntryForm(existing_data)
-    page_title = 'Edit New Page'
+    page_title = 'Edit Wiki'
     return render(request, "encyclopedia/entry_form.html", {'form': form, 'title': page_title})
+
 
