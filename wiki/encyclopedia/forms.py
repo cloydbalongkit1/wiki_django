@@ -6,11 +6,12 @@ class EntryForm(forms.Form):
         label="Title", 
         max_length=100, 
         required=True,
-        )
-    body = forms.CharField(
-        label="Body", 
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 30}), 
-        required=True,
-        )
+        widget=forms.TextInput(attrs={'placeholder': 'Your title input here...'})
+    )
 
+    body = forms.CharField(
+        label="Body",
+        required=True, 
+        widget=forms.Textarea(attrs={'placeholder': '# Title... Enter the body content here...'}), 
+    )
 
